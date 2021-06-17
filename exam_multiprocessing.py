@@ -37,6 +37,15 @@ def process():
     print("Stop child process")
 
 
+def main_loop():
+    try:
+        while True:
+            time.sleep(.01)
+    except ServiceExit:
+        print("Stop main process")
+        stop_evt.set()
+
+
 if __name__ == '__main__':
     print("Start main process")
 
@@ -46,13 +55,7 @@ if __name__ == '__main__':
     p = Process(target=process)
     p.start()
 
-    while True:
-        try:
-            time.sleep(.01)
-        except ServiceExit:
-            print("Stop main process")
-            stop_evt.set()
-            break
+    main_loop()
 
     p.join()
 
